@@ -424,7 +424,7 @@ public function edit_admin_role_permission(Request $request, RoleHasPermission $
                 return back()->with('error', 'Input can\'t be empty!');
             }
 
-        $requests = $request->validate([
+        $incomingFields = $request->validate([
         'permission_id' => ['required', 'min:1'],
         'role_id' => ['required', 'min:1'],
         ]);
@@ -1181,189 +1181,180 @@ return back()->with('error', 'Something went wrong. Try again!');
 
 
 
-/*
+
 
 // Results multiple data at once 
 
 
     // Result Controller
-public function upload_result(Request $request) {
-
-    if (Auth::guard('admin')->check()) {
-    
-       // dd($request->all());
-
-        $request->validate([
-            'faculty_id' => ['required', 'array'],
-            'department_id' => ['required', 'array'],
-            'level_id' => ['required', 'array'],
-            'section_id' => ['required', 'array'],
-            'semester_id' => ['required', 'array'],
-            'course_reg_id' => ['required', 'array'],
-            'user_id' => ['required', 'array'],
-            'course_unit' => ['required', 'array'],
-            'final_score' => ['required', 'array', 'numeric', 'between:0,100'],
-        ]);
-        
-        $resultsToInsert = [];
-        $selectedCourseRegIds = $request->course_reg_id;
-      //  $selectedCourseUnits = $request->course_unit;
-        $selectedFinalScore = $request->final_score;
-        
-        foreach ($selectedCourseRegIds as $index => $courseRegId) {
-            $facultyId = $request->faculty_id[$courseRegId];
-            $departmentId = $request->department_id[$courseRegId];
-            $levelId = $request->level_id[$courseRegId];
-            $sectionId = $request->section_id[$courseRegId];
-            $semesterId = $request->semester_id[$courseRegId];
-            $userId = $request->user_id[$courseRegId];
-            $finalScore = $selectedFinalScore[$courseRegId];
-            $courseUnit = $request->course_unit[$courseRegId];
-
-            // Check if result already exists
-            $rcourse = Result::where('user_id', $userId)
-                             ->where('course_reg_id', $courseRegId)
-                             ->exists();
-
-            if ($rcourse) {
-                return back()->with('error', 'Result for course {$courseRegId} already uploaded for student {$userId}.');
-            }
-
-            // Grade calculation
-            if ($finalScore >= 70) {
-                $grade = 'A';
-                $grade_point = 5;
-            } elseif ($finalScore >= 60) {
-                $grade = 'B';
-                $grade_point = 4;
-            } elseif ($finalScore >= 50) {
-                $grade = 'C';
-                $grade_point = 3;
-            } elseif ($finalScore >= 45) {
-                $grade = 'D';
-                $grade_point = 2;
-            } elseif ($finalScore >= 40) {
-                $grade = 'E';
-                $grade_point = 1;
-            } else {
-                $grade = 'F';
-                $grade_point = 0;
-            }
-
-            $weighted_grade_point = $courseUnit * $grade_point;
-
-            // Prepare data for batch insert
-            $resultsToInsert[] = [
-                'user_id' => $userId,
-                'faculty_id' => $facultyId,
-                'department_id' => $departmentId,
-                'level_id' => $levelId,
-                'section_id' => $sectionId,
-                'semester_id' => $semesterId,
-                'course_reg_id' => $courseRegId,
-                'course_unit' => $courseUnit,
-                'final_score' => $finalScore,
-                'grade' => $grade,
-                'grade_point' => $grade_point,
-                'weighted_grade_point' => $weighted_grade_point,
-                'lecturer_id' => 1,
-                'unique_id' => rand(time(), 1000000),
-                'status' => 'Active',
-            ];
-        }
-        
-
-        // Batch insert results
-        Result::create($resultsToInsert);
-
-        return back()->with('success', 'Results Successfully uploaded!');
+public function upload_result(Request $request)
+{
+    if (!Auth::guard('admin')->check()) {
+        return back()->with('error', 'Unauthorized access');
     }
 
+    $request->validate([
+        'course_reg_id' => 'array',
+        'final_score'   => 'array',
+        'final_score.*' => 'numeric|between:0,100',
+        'faculty_id'    => 'array',
+        'department_id' => 'array',
+        'level_id'      => 'array',
+        'section_id'    => 'array',
+        'semester_id'   => 'array',
+        'user_id'       => 'array',
+        'course_unit'   => 'array',
+    ]);
+
+    $resultsToInsert = [];
+
+    foreach ($request->course_reg_id as $courseRegId) {
+
+        // Each field uses courseRegId as array key (matches your input names)
+        $facultyId   = $request->faculty_id[$courseRegId];
+        $departmentId = $request->department_id[$courseRegId];
+        $levelId     = $request->level_id[$courseRegId];
+        $sectionId   = $request->section_id[$courseRegId];
+        $semesterId  = $request->semester_id[$courseRegId];
+        $userId      = $request->user_id[$courseRegId];
+        $courseUnit  = $request->course_unit[$courseRegId];
+        $finalScore  = $request->final_score[$courseRegId];
+
+        // Check if result already exists
+        $exists = Result::where('user_id', $userId)
+                        ->where('course_reg_id', $courseRegId)
+                        ->exists();
+
+        if ($exists) {
+            return back()->with('error', "Result for course {$courseRegId} already uploaded for student {$userId}.");
+        }
+
+        // Grade logic
+        if ($finalScore >= 70) {
+            $grade = 'A'; $grade_point = 5;
+        } elseif ($finalScore >= 60) {
+            $grade = 'B'; $grade_point = 4;
+        } elseif ($finalScore >= 50) {
+            $grade = 'C'; $grade_point = 3;
+        } elseif ($finalScore >= 45) {
+            $grade = 'D'; $grade_point = 2;
+        } elseif ($finalScore >= 40) {
+            $grade = 'E'; $grade_point = 1;
+        } else {
+            $grade = 'F'; $grade_point = 0;
+        }
+
+        $weighted_grade_point = $courseUnit * $grade_point;
+
+        $resultsToInsert[] = [
+            'user_id'             => $userId,
+            'faculty_id'          => $facultyId,
+            'department_id'       => $departmentId,
+            'level_id'            => $levelId,
+            'section_id'          => $sectionId,
+            'semester_id'         => $semesterId,
+            'course_reg_id'       => $courseRegId,
+            'course_unit'         => $courseUnit,
+            'final_score'         => $finalScore,
+            'grade'               => $grade,
+            'grade_point'         => $grade_point,
+            'weighted_grade_point'=> $weighted_grade_point,
+            'lecturer_id'         => 1,
+            'unique_id'           => rand(time(), 1000000),
+            'status'              => 'Active',
+        ];
+    }
+
+    // ✅ Batch insert
+    Result::insert($resultsToInsert);
+
+    return back()->with('success', 'Results Successfully uploaded!');
 }
+
 
 
 
 // Results multiple data at once end
 
-*/
+
 
 
 
 
 
     // Result Controller
-    public function upload_result(Request $request) {
+//     public function upload_result(Request $request) {
 
-        if (Auth::guard('admin')->check()) {
+//         if (Auth::guard('admin')->check()) {
 
 
-        $requests = $request->validate([
-            'faculty_id' => ['required', 'min:1'],
-            'department_id' => ['required', 'min:1'],
-            'level_id' => ['required', 'min:1'],
-            'section_id' => ['required', 'min:1'],
-            'semester_id' => ['required', 'min:1'],
-            'course_reg_id' => ['required', 'min:1'],
-            'user_id' => ['required', 'min:1'],
-            'course_unit' => ['required', 'min:1'],
-            'final_score' => ['max:3'],
-        ]);
+//         $requests = $request->validate([
+//             'faculty_id' => ['required', 'min:1'],
+//             'department_id' => ['required', 'min:1'],
+//             'level_id' => ['required', 'min:1'],
+//             'section_id' => ['required', 'min:1'],
+//             'semester_id' => ['required', 'min:1'],
+//             'course_reg_id' => ['required', 'min:1'],
+//             'user_id' => ['required', 'min:1'],
+//             'course_unit' => ['required', 'min:1'],
+//             'final_score' => ['max:3'],
+//         ]);
         
-       //  foreach ($requests as $key => $requestt) {
+//        //  foreach ($requests as $key => $requestt) {
 
-        $rcourse = Result::where('user_id', '=', $requests['user_id'])->where('course_reg_id', '=', $requests['course_reg_id'])->exists();
-
-
-        if ($rcourse) {
-            return back()->with('error', 'Student result already uploaded.');
-        }
-
-        if ($requests['final_score'] >= 70) {
-            $requests['grade'] = 'A';
-            $requests['grade_point'] = 5;
-        } elseif ($requests['final_score'] >= 60) {
-            $requests['grade'] = 'B';
-            $requests['grade_point'] = 4;
-        } elseif ($requests['final_score'] >= 50) {
-            $requests['grade'] = 'C';
-            $requests['grade_point'] = 3;
-        } elseif ($requests['final_score'] >= 45) {
-            $requests['grade'] = 'D';
-            $requests['grade_point'] = 2;
-        } elseif ($requests['final_score'] >= 40) {
-            $requests['grade'] = 'E';
-            $requests['grade_point'] = 1;
-        } else {
-            $requests['grade'] = 'F';
-            $requests['grade_point'] = 0;
-        }
-
-        $requests['grade'] = $requests['grade'];
-        $requests['grade_point'] = $requests['grade_point'];
-
-        $requests['weighted_grade_point'] = $requests['course_unit'] * $requests['grade_point'];
-
-        $requests['weighted_grade_point'] = $requests['weighted_grade_point'];
+//         $rcourse = Result::where('user_id', '=', $requests['user_id'])->where('course_reg_id', '=', $requests['course_reg_id'])->exists();
 
 
-        // if ($requests->fails()) {
-        //     return back()->with('error', 'Carefully check your inputs and try again.');
-        // }
+//         if ($rcourse) {
+//             return back()->with('error', 'Student result already uploaded.');
+//         }
+
+//         if ($requests['final_score'] >= 70) {
+//             $requests['grade'] = 'A';
+//             $requests['grade_point'] = 5;
+//         } elseif ($requests['final_score'] >= 60) {
+//             $requests['grade'] = 'B';
+//             $requests['grade_point'] = 4;
+//         } elseif ($requests['final_score'] >= 50) {
+//             $requests['grade'] = 'C';
+//             $requests['grade_point'] = 3;
+//         } elseif ($requests['final_score'] >= 45) {
+//             $requests['grade'] = 'D';
+//             $requests['grade_point'] = 2;
+//         } elseif ($requests['final_score'] >= 40) {
+//             $requests['grade'] = 'E';
+//             $requests['grade_point'] = 1;
+//         } else {
+//             $requests['grade'] = 'F';
+//             $requests['grade_point'] = 0;
+//         }
+
+//         $requests['grade'] = $requests['grade'];
+//         $requests['grade_point'] = $requests['grade_point'];
+
+//         $requests['weighted_grade_point'] = $requests['course_unit'] * $requests['grade_point'];
+
+//         $requests['weighted_grade_point'] = $requests['weighted_grade_point'];
 
 
-        $requests['lecturer_id'] = 1;
-        $requests['unique_id'] = rand(time(), 1000000);
-        $requests['status'] = 'Active';
+//         // if ($requests->fails()) {
+//         //     return back()->with('error', 'Carefully check your inputs and try again.');
+//         // }
+
+
+//         $requests['lecturer_id'] = 1;
+//         $requests['unique_id'] = rand(time(), 1000000);
+//         $requests['status'] = 'Active';
 
         
 
-            Result::create($requests);
-        // }
+//             Result::create($requests);
+//         // }
 
-        return back()->with('success', 'Result Successfully uploaded!');
-    }
+//         return back()->with('success', 'Result Successfully uploaded!');
+//     }
 
-}
+// }
 
 
 // Result End

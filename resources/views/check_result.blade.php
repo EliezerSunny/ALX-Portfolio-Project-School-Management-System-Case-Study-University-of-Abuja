@@ -476,6 +476,7 @@
                 <!-- Main Profile End-->
 
               </div>
+              <button onclick="window.print()">Print Result</button>
               <!-- Main Board End-->
 
             </div>

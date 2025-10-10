@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2025 at 07:37 AM
+-- Generation Time: Oct 10, 2025 at 04:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -729,7 +729,26 @@ CREATE TABLE `results` (
 
 INSERT INTO `results` (`id`, `faculty_id`, `department_id`, `level_id`, `section_id`, `semester_id`, `course_reg_id`, `user_id`, `lecturer_id`, `unique_id`, `course_unit`, `final_score`, `grade`, `weighted_grade_point`, `grade_point`, `status`, `created_at`, `updated_at`) VALUES
 (20, 7, 1, 1, 1, 2, 156, 1, 1, '342468797', '1', '60', 'B', '4', '4', 'Active', '2024-09-09 19:33:16', '2024-09-09 19:33:16'),
-(21, 7, 1, 1, 1, 2, 146, 1, 1, '372479350', '2', '50', 'C', '6', '3', 'Active', '2024-09-11 05:06:03', '2024-09-11 05:14:01');
+(21, 7, 1, 1, 1, 2, 146, 1, 1, '372479350', '2', '50', 'C', '6', '3', 'Active', '2024-09-11 05:06:03', '2024-09-11 05:14:01'),
+(22, 7, 1, 1, 1, 1, 118, 1, 1, '77840872', '2', '70', 'A', '10', '5', 'Active', NULL, NULL),
+(23, 7, 1, 1, 1, 1, 125, 1, 1, '224758750', '4', '40', 'E', '4', '1', 'Active', NULL, '2025-10-10 12:19:37'),
+(24, 7, 1, 1, 1, 1, 126, 1, 1, '621373411', '3', '70', 'A', '15', '5', 'Active', NULL, NULL),
+(25, 7, 1, 1, 1, 1, 127, 1, 1, '622908080', '2', '70', 'A', '10', '5', 'Active', NULL, NULL),
+(26, 7, 1, 1, 1, 1, 128, 1, 1, '427149773', '3', '70', 'A', '15', '5', 'Active', NULL, NULL),
+(27, 7, 1, 1, 1, 1, 129, 1, 1, '692507916', '1', '70', 'A', '5', '5', 'Active', NULL, NULL),
+(28, 7, 1, 1, 1, 1, 130, 1, 1, '324906335', '3', '70', 'A', '15', '5', 'Active', NULL, NULL),
+(29, 7, 1, 1, 1, 1, 131, 1, 1, '302620251', '2', '70', 'A', '10', '5', 'Active', NULL, NULL),
+(30, 7, 1, 1, 1, 1, 132, 1, 1, '683799417', '1', '70', 'A', '5', '5', 'Active', NULL, NULL),
+(31, 7, 1, 1, 1, 1, 133, 1, 1, '1055249653', '2', '70', 'A', '10', '5', 'Active', NULL, NULL),
+(32, 7, 1, 1, 1, 2, 147, 1, 1, '780362473', '2', '86', 'A', '10', '5', 'Active', NULL, '2025-10-10 12:58:33'),
+(33, 7, 1, 1, 1, 2, 148, 1, 1, '74708504', '2', '48', 'D', '4', '2', 'Active', NULL, NULL),
+(34, 7, 1, 1, 1, 2, 149, 1, 1, '1435076454', '2', '38', 'F', '0', '0', 'Active', NULL, NULL),
+(35, 7, 1, 1, 1, 2, 150, 1, 1, '1118972648', '1', '45', 'D', '2', '2', 'Active', NULL, NULL),
+(36, 7, 1, 1, 1, 2, 151, 1, 1, '2391628', '3', '74', 'A', '15', '5', 'Active', NULL, NULL),
+(37, 7, 1, 1, 1, 2, 152, 1, 1, '1180514832', '2', '74', 'A', '10', '5', 'Active', NULL, NULL),
+(38, 7, 1, 1, 1, 2, 153, 1, 1, '29792422', '2', '53', 'C', '6', '3', 'Active', NULL, NULL),
+(39, 7, 1, 1, 1, 2, 154, 1, 1, '688538923', '3', '75', 'A', '15', '5', 'Active', NULL, '2025-10-10 12:59:06'),
+(40, 7, 1, 1, 1, 2, 155, 1, 1, '1673158021', '2', '54', 'C', '6', '3', 'Active', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -848,8 +867,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_type`, `user_id`, `lecturer_id`, `admin_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('IkMQt5T0IhvhuFtp5rzs3lbgk4MC74BPefqv5eZB', NULL, 10, NULL, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVmtCU1VBNnVPNGZBQXFYNDl3aUxtTEMwQTNuVzdPM0dqU0QzcXVoVSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxMDt9', 1740206202),
-('nrzmcyT4yBpsHI3p9KKgF6yramAgqrSwEbpmVQcM', NULL, 1, NULL, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoieEsxQTg1a1EyUEhzZE1RYjUwTUxaUnIzek1kMnFMUzA2cEhjRHhTTyI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozNjoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2NsZWFyYW5jZV9mb3JtIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MTkxOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvcGF5bWVudF9zdWNjZXNzZnVsLzZwODUyOTk3ODUzP2VESmFZa2xPY2tGSVN6UmxTR2xUWVZWTlNFcGhSbFZCWTJsUk1VRm5hMHRKT1ZaSFVEZzNTbmRET1RNeVoyZEdNMHhNYTFKTk5qWmpTamhYWTBoUFFrNDFNWFJ4VUVkWVkwbDZZVVZMV0dKTGRqSm5aM0JIVDA1bU9HODVWMlp0ZVZkU2VnPSUzRCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1740205925);
+('AB99MotODL9NbROcucNI8iL4olcVlT7IEzkbfNKH', NULL, 1, NULL, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoibUsxUTR5UGNuSHdHSDdpaVJodUdRR2FFODRXOXhUSVVKR2RTbEhoYSI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoxOTY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9jaGVja19yZXN1bHQ/bGV2ZWw9MSZzZW1lc3Rlcj0yJnQ9ZFhCbmJ6bFlkVGRFU0RNNFFqSm1TazlyZGpsbmRWWnpZbU5QVUhScFRXczJha2hYWldONE4zaGljbXBxWjFKU1dUUnpialJDUkdSbFMyUk1hMjA1VFhoSFVGZFlPRWRCTjJsTlNVNU5hRWxTV2xvMFltMDFjakpLTlRONGF6SkdSbUZpTXclM0QlM0QiO31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czozNjoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2NoYW5nZV9waWN0dXJlIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1760104875),
+('vG5U9zieeVJzY08cTv9MO9Q0dkKlmWBiW0tLIclt', NULL, NULL, NULL, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiQ0ljdHlhdTFyZEpzVWlFOURWekwxQzZCelN5S0NVaUhid25JVTBkdSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTI6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sZWN0dXJlci9hZG1pbi9lZGl0X3Jlc3VsdHMvMzkiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUyOiJsb2dpbl9hZG1pbl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7fQ==', 1760104748);
 
 -- --------------------------------------------------------
 
@@ -1260,7 +1279,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `results`
 --
 ALTER TABLE `results`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `roles`
