@@ -17,6 +17,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('auth:clear-resets')->everyThirtyMinutes();
 
         $schedule->call([User::class, 'incrementStudentLevels'])->yearly(); 
+
+    $schedule->command('students:promote')->yearly(); // or ->yearlyOn(9, 1);
+    
     }
 
     /**
